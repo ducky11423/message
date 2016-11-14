@@ -1,0 +1,10 @@
+{
+  "name": "msg",
+  "version": "0.0.1",
+  "private": "true",
+  "description": "msg app thing",
+  "dependencies": {
+    "express": "*",
+    "socket.io": "*"
+  }
+}
