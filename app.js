@@ -6,7 +6,7 @@ var express = require('express'),
 
 server.listen(3000);
 
-app.get('/', function (req, res) {
+app.get('/message', function (req, res) {
     res.sendfile(__dirname + '/index.html');
 });
 
