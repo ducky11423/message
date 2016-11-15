@@ -1,47 +1,4 @@
-<!DOCTYPE html>
-
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <meta charset="utf-8" />
-    <title>MSG Service</title>
-    <style>
-        #chat{
-            height:500px;
-        }
-        #contentWrap{
-            display: none;
-        }
-        #chatWrap{
-            float: left;
-            border: 1px #000 solid;
-        }
-    </style>
-</head>
-<body>
-    <div id="nickWrap">
-        <p>Enter a username:</p>
-        <p id="nickError"></p>
-        <form id="setNick">
-            <input size="35" id="nickname" />
-            <input type="submit" />
-        </form>
-    </div>
-
-    <div id="contentWrap">
-        <div id="chatWrap">
-            <div id="chat"></div>
-            <form id="send-message">
-                <input size="35" id="message" />
-                <input type="submit" />
-            </form>
-        </div>
-        <div id="users"></div>
-    </div>
-
-    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-    <script src="/socket.io/socket.io.js"></script>
-    <script>
-        jQuery(function ($) {
+jQuery(function ($) {
             var socket = io.connect();
             var $nickForm = $('#setNick');
             var $nickError = $('#nickError');
@@ -82,6 +39,3 @@
                 $chat.append('<b>' + data.nick + ': </b>' + data.msg + "<br/>");
             });
         });
-    </script>
-</body>
-</html>

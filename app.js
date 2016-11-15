@@ -7,8 +7,10 @@ var express = require('express'),
 server.listen(3000);
 
 app.get('/message', function (req, res) {
-    res.sendfile(__dirname + '/index.html');
+    res.sendfile(__dirname + '/client/index.html');
 });
+
+app.use("/client.js", express.static(__dirname + "/client/client.js"));
 
 io.sockets.on('connection', function (socket) {
     socket.on('new user', function (data, callback) {
