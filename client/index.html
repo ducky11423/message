@@ -31,6 +31,12 @@
         body {
           background: rgb(61, 55, 53);
         }
+        #send-message{
+          position: absolute;
+          left: 50%;
+          top: 40%;
+          transform: translate(-50%, -40%);
+        }
     </style>
 </head>
 <body>
@@ -46,11 +52,11 @@
     <div id="contentWrap">
         <div id="chatWrap">
             <div id="chat"></div>
-            <form id="send-message">
-                <input size="35" id="message" />
-                <input type="submit" />
-            </form>
         </div>
+        <form id="send-message">
+            <input size="35" id="message" />
+            <input type="submit" />
+        </form>
         <div id="users"></div>
     </div>
 
