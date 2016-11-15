@@ -36,8 +36,12 @@ jQuery(function ($) {
             });
 
             socket.on('new message', function (data) {
-                $chat.append('<b>' + data.nick + ': </b>' + data.msg + "<br/>");
-                document.getElementById('chat').appendChild('new message');
-                document.getElementById('chat').scrollTop = messageBox.offsetHeight + messageBox.offsetTop;
+                var messagee = document.createElement('p');
+                messagee.id = 'boi';
+                messagee.style.visibility = 'hidden';
+                //messagee(whichIsVisible()[0].id);
+                messagee.innerHTML = $chat.append('<b>' + data.nick +  ': </b>' + data.msg);
+                document.getElementById('chat').appendChild(messagee);
+                document.getElementById('chat').scrollTop = messagee.offsetHeight + messagee.offsetTop;
             });
         });
