@@ -36,8 +36,8 @@ jQuery(function ($) {
             });
 
             socket.on('new message', function (data) {
-                var messagee = document.createElement('p');
-                messagee.id = 'boi';
+                var messagee = document.createElement('div');
+                messagee.id = 'msg';
                 messagee.style.visibility = 'hidden';
                 //messagee(whichIsVisible()[0].id);
                 messagee.innerHTML = $chat.append('<b>' + data.nick +  ': </b>' + data.msg);
