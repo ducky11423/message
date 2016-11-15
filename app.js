@@ -10,7 +10,11 @@ app.get('/message', function (req, res) {
     res.sendfile(__dirname + '/client/index.html');
 });
 
-
+if(process.argv[2] == "dev") {
+    app.get('/client/*', function (req, res) {
+        res.sendfile(__dirname + req.url);
+    });
+}
 
 io.sockets.on('connection', function (socket) {
     socket.on('new user', function (data, callback) {
