@@ -34,8 +34,6 @@ io.sockets.on('connection', function (socket) {
 
     socket.on('send message', function (data) {
         io.sockets.emit('new message', { msg: data, nick: socket.nickname });
-        document.getElementById('chat').appendChild('new message');
-        document.getElementById('chat').scrollTop = messageBox.offsetHeight + messageBox.offsetTop;
     });
 
     socket.on('disconnect', function (data) {

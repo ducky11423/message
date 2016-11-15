@@ -37,5 +37,7 @@ jQuery(function ($) {
 
             socket.on('new message', function (data) {
                 $chat.append('<b>' + data.nick + ': </b>' + data.msg + "<br/>");
+                document.getElementById('chat').appendChild('new message');
+                document.getElementById('chat').scrollTop = messageBox.offsetHeight + messageBox.offsetTop;
             });
         });
