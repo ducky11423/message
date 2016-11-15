@@ -12,8 +12,22 @@
             display: none;
         }
         #chatWrap{
-            float: left;
-            border: 1px #000 solid;
+          #wrap { /* how to australian */
+position: absolute;
+left: 50%;
+top: 50%;
+transform: translate(-50%, -50%);
+
+width: 52.5%;
+height: 66%;
+
+padding: 20px;
+background: rgb(244, 92, 66);
+color: black;
+text-align: center;
+box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+clear: both;
+}
         }
     </style>
 </head>
@@ -40,6 +54,6 @@
 
     <script src="http://code.jquery.com/jquery-latest.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
-    <script src="/client/client.js"></script>    
+    <script src="/client/client.js"></script>
  </body>
 </html>
