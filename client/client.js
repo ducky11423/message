@@ -11,12 +11,12 @@ jQuery(function ($) {
             $nickForm.submit(function(e){
                 e.preventDefault();
                 socket.emit('new user', $nickBox.val(), function (data) {
-                    if (data) {
+                    if (data){
                         $('#nickWrap').hide();
                         $('#contentWrap').show();
                         $('#users').show();
                     } else {
-                        $nickError.html('Lmao pls pick another username, that one is taken.');
+                        $nickError.html('Lmao no pls pick another username, that one is already taken.');
                     }
                 });
                 $nickBox.val('');

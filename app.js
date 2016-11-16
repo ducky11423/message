@@ -21,8 +21,9 @@ io.sockets.on('connection', function (socket) {
         if (data in users) {
             callback(false);
         } else {
+          if(data.indexOf(' ') == -1){
             callback(true);
-            var nick = escapeChars(data)
+            var nick = escapeChars(data);
             if(nick.length > 16){
                 nick = nick.substring(0, 15);
                 nick += "...";
@@ -31,6 +32,7 @@ io.sockets.on('connection', function (socket) {
             users[socket.nickname] = socket;
             updateNicknames();
         }
+      }
     });
 
     function updateNicknames() {
