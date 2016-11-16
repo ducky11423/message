@@ -22,7 +22,12 @@ io.sockets.on('connection', function (socket) {
             callback(false);
         } else {
             callback(true);
-            socket.nickname = escapeChars(data);
+            var nick = escapeChars(data)
+            if(nick.length > 16){
+                nick = nick.substring(0, 15);
+                nick += "...";
+            }
+            socket.nickname = nick;
             nicknames.push(socket.nickname);
             updateNicknames();
         }
