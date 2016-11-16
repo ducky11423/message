@@ -47,7 +47,9 @@ io.sockets.on('connection', function (socket) {
           var name = msg.substring(0, ind);
           var msg = msg.substring(ind + 1);
           if(name in users){
-            users[name].emit('whisper', { msg: escapeChars(msg), nick: socket.nickname });
+            users[name].emit('whisper', { msg: escapeChars(msg), nick: socket.nickname + " -> You" });
+            users[socket.nickname].emit('whisper', {msg: escapeChars(msg), nick: "You -> " + name});
+            console.log(socket.nickname);
             console.log('Whisper!');
           } else{
             callback('Whoops! Try typing a valid user next time lmao.');
