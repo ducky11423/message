@@ -26,7 +26,6 @@ io.sockets.on('connection', function (socket) {
             var nick = escapeChars(data);
             if(nick.length > 16){
                 nick = nick.substring(0, 15);
-                nick += "...";
             }
             socket.nickname = nick;
             users[socket.nickname] = socket;
