@@ -22,7 +22,7 @@ io.sockets.on('connection', function (socket) {
             callback(false);
         } else {
             callback(true);
-            socket.nickname = data;
+            socket.nickname = escapeChars(data);
             nicknames.push(socket.nickname);
             updateNicknames();
         }
@@ -33,7 +33,7 @@ io.sockets.on('connection', function (socket) {
     }
 
     socket.on('send message', function (data) {
-        io.sockets.emit('new message', { msg: data, nick: socket.nickname });
+        io.sockets.emit('new message', { msg: escapeChars(data), nick: socket.nickname });
     });
 
     socket.on('disconnect', function (data) {
@@ -42,3 +42,11 @@ io.sockets.on('connection', function (socket) {
         updateNicknames();
     });
 });
+
+
+function escapeChars(input){
+    input = input.replace("<", "&lt;");
+    input = input.replace(">", "&gt;");
+    input = input.replace("/", "&frasl;");
+    return input;
+}
