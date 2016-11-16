@@ -3,6 +3,8 @@
     word-wrap: break-word;
     overflow:auto;
     padding: 20px;
+    font-family: Verdana, Geneva, sans-serif;
+    font-size: 14px;
   }
 #chatWrap{
   width: 100%;
@@ -37,5 +39,19 @@ body {
 }
 #users{
   display:none;
-
+  font-family: Verdana, Geneva, sans-serif;
+  color: white;
+  font-size: 16px;
+}
+#enter_username{
+  font-family: Verdana, Geneva, sans-serif;
+  color: white;
+  font-size: 16px;
+}
+.error{
+  color: red;
+}
+.whisper{
+  color: darkgrey;
+  font-style: italic;
 }

@@ -32,12 +32,20 @@ jQuery(function ($) {
 
             $messageForm.submit(function (e) {
                 e.preventDefault();
-                socket.emit('send message', $messageBox.val());
+                socket.emit('send message', $messageBox.val(), function(data){
+                  document.getElementById('chat').innerHTML += "<span class='error'>" + data + "</span></br>";
+                  document.getElementById('chat').scrollTop = document.getElementById('chat').scrollHeight;
+                });
                 $messageBox.val('');
             });
 
             socket.on('new message', function (data) {
-                document.getElementById('chat').innerHTML += "<b>" + data.nick + ":</b> " + data.msg + "</br>";
+                document.getElementById('chat').innerHTML += "<span class='msg'><b>" + data.nick + ":</b> " + data.msg + "</span></br>";
                 document.getElementById('chat').scrollTop = document.getElementById('chat').scrollHeight;
+            });
+
+            socket.on('whisper', function(data){
+              document.getElementById('chat').innerHTML += "<span class='whisper'><b>" + data.nick + ":</b> " + data.msg + "</span></br>";
+              document.getElementById('chat').scrollTop = document.getElementById('chat').scrollHeight;
             });
         });
