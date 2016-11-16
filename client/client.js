@@ -14,7 +14,7 @@ jQuery(function ($) {
                     if (data) {
                         $('#nickWrap').hide();
                         $('#contentWrap').show();
-                        $('users').show();
+                        $('#users').show();
                     } else {
                         $nickError.html('Lmao pls pick another username, that one is taken.');
                     }

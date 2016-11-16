@@ -17,20 +17,29 @@
         </form>
     </div>
 
-<div id="contentWrap">
-        <div id="chatWrap">
-            <div id="chat"></div>
-        </div>
+<table style="width:100%">
+    <tr>
+        <td style="width:12.5%">
+        </td>
 
-        <div id="form">
-        <form id="send-message">
-            <input size="35" id="message" />
-            <input type="submit" />
-        </form>
-        </div>
-</div>
+        <td style="width:75%">
+            <div id="contentWrap">
+                <div id="chatWrap">
+                    <div id="chat"></div>
+                </div>
 
-<div id="users"></div>
+                <div id="form">
+                    <form id="send-message">
+                        <input size="35" id="message" />
+                        <input type="submit" />
+                    </form>
+                </div>
+            </div>
+        </td>
+        <td style="width:12.5%">
+            <div id="users"></div>
+        </td>
+</table>
 
     <script src="http://code.jquery.com/jquery-latest.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
