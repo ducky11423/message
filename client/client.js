@@ -1,8 +1,8 @@
 jQuery(function ($) {
             var socket = io.connect();
-            var $nickForm = $('#setNick');
             var $nickError = $('#nickError');
-            var $nickBox = $('#nickname');
+            var $nickBox = $('#nickname_field');
+            var $nickButton = $('#nickname_button');
             var $users = $('#users');
             var $messageForm = $('#send-message');
             var $messageBox = $('#message');
@@ -12,8 +12,17 @@ jQuery(function ($) {
                 
             }
 
-            $nickForm.submit(function(e){
-                e.preventDefault();
+            $nickButton.click(function(e){
+                submitNick();
+            });
+
+            $nickBox.keyup(function(e){
+                if(e.keyCode == 13){
+                    submitNick();
+                }
+            });
+
+            function submitNick(){
                 socket.emit('new user', $nickBox.val(), function (data) {
                     if (data){
                         $('#nickWrap').hide();
@@ -24,7 +33,7 @@ jQuery(function ($) {
                     }
                 });
                 $nickBox.val('');
-            });
+            }
 
             socket.on('usernames', function(data){
                 var html = '';
