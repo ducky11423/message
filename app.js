@@ -16,6 +16,8 @@ fs.readFile(__dirname + "/users.json", (err, data) => {
         } else throw err;
     }
 
+    if(data == "") return;
+
     var parsed = JSON.parse(data);
     for(var x in parsed){
         accounts.push(parsed[x]);
