@@ -1,24 +1,51 @@
 jQuery(function ($) {
             var socket = io.connect();
             var $nickError = $('#nickError');
-            var $nickBox = $('#nickname_field');
-            var $nickButton = $('#nickname_button');
+            var $cName = $('#create_nickname');
+            var $cPassword = $('#create_password');
+            var $cButton = $('#create_button');
+            
             var $users = $('#users');
             var $messageField = $('#message_field');
             var $messageButton = $('#message_button');
             var $chat = $('#chat');
 
             function createAccount(){
-                
+                if($cName.val() == "") {
+                    $nickError.html("You must specify a username");
+                    return;
+                }
+                if($cPassword.val() == "") {
+                    $nickError.html("You must put in a password");
+                    return;
+                }
+
+                socket.emit('create user', {name: $cName.val(), password: $cPassword.val()}, function (data) {
+                    if (data){
+                        $('#nickWrap').hide();
+                        $('#contentWrap').show();
+                        $('#users').show();
+                    } else {
+                        $nickError.html('Lmao no pls pick another username, that one is already taken.');
+                    }
+                });
+                $cName.val('');
+                $cPassword.val('');
             }
 
-            $nickButton.click(function(e){
-                submitNick();
+            $cButton.click(function(e){
+                createAccount();
             });
 
-            $nickBox.keyup(function(e){
+            $cName.keyup(function(e){
                 if(e.keyCode == 13){
-                    submitNick();
+                    createAccount();
+                }
+            });
+
+            $cPassword.keyup(function(e){
+                if(e.keyCode == 13){
+                    createAccount();
                 }
             });
 

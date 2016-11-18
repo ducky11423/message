@@ -5,7 +5,7 @@ var express = require('express'),
     fs = require('fs'),
     sha1 = require('sha1')
     users = {}, 
-    accounts = {};
+    accounts = [];
 
 fs.readFile(__dirname + "/users.json", (err, data) => {
     if(err){
@@ -90,7 +90,7 @@ io.sockets.on('connection', function (socket) {
         }
         if(!userExists){
             var pwd = sha1(data.password);
-            accounts.push({name: data.name, password: pwd})
+            accounts[accounts.length] = {name: data.name, password: pwd};
 
             saveAccounts();
         }
@@ -112,9 +112,14 @@ function escapeChars(input){
 }
 
 function saveAccounts(){
-    var json = JSON.stringify(accounts);
+    //var json = JSON.stringify(accounts);
+    var json = "{";
+    for(i = 0; i < accounts.length; i++){
+        json += "\"" + i + "\":{\"name\":\"" + accounts[i].name + "\", \"password\":\"" + accounts[i].password + "\"}";
+        if(accounts[i+1]) json += ",";
+    }
+    json += "}";
     fs.writeFile(__dirname + "/users.json", json, (err) => {
         if(err) throw err;
     });
-
 }
