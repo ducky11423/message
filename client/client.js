@@ -8,6 +8,10 @@ jQuery(function ($) {
             var $messageBox = $('#message');
             var $chat = $('#chat');
 
+            function createAccount(){
+                
+            }
+
             $nickForm.submit(function(e){
                 e.preventDefault();
                 socket.emit('new user', $nickBox.val(), function (data) {

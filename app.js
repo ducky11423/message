@@ -1,8 +1,26 @@
 var express = require('express'),
     app = express(),
     server = require('http').createServer(app),
-    io = require('socket.io').listen(server),
-    users = {};
+    io = require('socket.io').listen(server), 
+    fs = require('fs'),
+    sha1 = require('sha1')
+    users = {}, 
+    accounts = {};
+
+fs.readFile(__dirname + "/users.json", (err, data) => {
+    if(err){
+        if(err.code === "ENOENT"){
+            fs.writeFile(__dirname + "/users.json", "{}", (err) => {
+                if(err) throw err;
+            });
+        } else throw err;
+    }
+
+    var parsed = JSON.parse(data);
+    for(var x in parsed){
+        accounts.push(parsed[x]);
+    }
+})
 
 server.listen(3000);
 
@@ -62,6 +80,22 @@ io.sockets.on('connection', function (socket) {
       }
     });
 
+    socket.on('create user', function (data, callback) {
+        var userExists = false;
+        for(var v in accounts){
+            if(v.name == data.name) {
+                userExists = true;
+                callback(false);
+            }
+        }
+        if(!userExists){
+            var pwd = sha1(data.password);
+            accounts.push({name: data.name, password: pwd})
+
+            saveAccounts();
+        }
+    });
+
     socket.on('disconnect', function (data) {
         if (!socket.nickname) return;
         delete users[socket.nickname];
@@ -75,4 +109,12 @@ function escapeChars(input){
     input = input.replace(new RegExp(">", "g"), "&gt;");
     input = input.replace(new RegExp("/", "g"), "&frasl;");
     return input;
+}
+
+function saveAccounts(){
+    var json = JSON.stringify(accounts);
+    fs.writeFile(__dirname + "/users.json", json, (err) => {
+        if(err) throw err;
+    });
+
 }
