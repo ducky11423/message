@@ -37,7 +37,7 @@ if(process.argv[2] == "dev") {
 }
 
 io.sockets.on('connection', function (socket) {
-    socket.on('new user', function (data, callback) {
+    socket.on('login', function (data, callback) {
         if (data in users) {
             callback(false);
         } else {
@@ -84,7 +84,8 @@ io.sockets.on('connection', function (socket) {
 
     socket.on('create user', function (data, callback) {
         var userExists = false;
-        for(var v in accounts){
+        for(i = 0; i < accounts.length; i++){
+            var v = accounts[i];
             if(v.name == data.name) {
                 userExists = true;
                 callback(false);
@@ -95,6 +96,7 @@ io.sockets.on('connection', function (socket) {
             accounts[accounts.length] = {name: data.name, password: pwd};
 
             saveAccounts();
+            callback(true);
         }
     });
 
