@@ -4,6 +4,10 @@ jQuery(function ($) {
             var $cName = $('#create_nickname');
             var $cPassword = $('#create_password');
             var $cButton = $('#create_button');
+
+            var $lName = $('#login_nickname');
+            var $lPassword = $('#login_password');
+            var $lButton = $('#login_button');
             
             var $users = $('#users');
             var $messageField = $('#message_field');
@@ -22,9 +26,7 @@ jQuery(function ($) {
 
                 socket.emit('create user', {name: $cName.val(), password: $cPassword.val()}, function (data) {
                     if (data){
-                        $('#nickWrap').hide();
-                        $('#contentWrap').show();
-                        $('#users').show();
+                        $nickError.html("Account made! Login now.");
                     } else {
                         $nickError.html('Lmao no pls pick another username, that one is already taken.');
                     }
@@ -49,28 +51,44 @@ jQuery(function ($) {
                 }
             });
 
-            $messageButton.click(function(e){
-                submitMessage();
-            });
-
-            $messageField.keyup(function(e){
-                if(e.keyCode == 13){
-                    submitMessage();
+            function login(){
+                if($lName.val() == "") {
+                    $loginError.html("You must specify a username");
+                    return;
                 }
-            })
+                if($lPassword.val() == "") {
+                    $loginError.html("You must put in a password");
+                    return;
+                }
 
-            function submitNick(){
-                socket.emit('new user', $nickBox.val(), function (data) {
+                socket.emit('login', {name: $lName.val(), password: $lPassword.val()}, function (data) {
                     if (data){
                         $('#nickWrap').hide();
                         $('#contentWrap').show();
                         $('#users').show();
                     } else {
-                        $nickError.html('Lmao no pls pick another username, that one is already taken.');
+                        $loginError.html('Username or password incorrect.');
                     }
                 });
-                $nickBox.val('');
+                $lName.val('');
+                $lPassword.val('');
             }
+
+            $lButton.click(function(e){
+                login();
+            });
+
+            $lName.keyup(function(e){
+                if(e.keyCode == 13){
+                    login();
+                }
+            });
+
+            $lPassword.keyup(function(e){
+                if(e.keyCode == 13){
+                    login();
+                }
+            });
 
             function submitMessage(){
                 if($messageField.val() != ""){
@@ -82,6 +100,16 @@ jQuery(function ($) {
                 
                 $messageField.val('');
             }
+
+            $messageButton.click(function(e){
+                submitMessage();
+            });
+
+            $messageField.keyup(function(e){
+                if(e.keyCode == 13){
+                    submitMessage();
+                }
+            })
 
             socket.on('usernames', function(data){
                 var html = '';
