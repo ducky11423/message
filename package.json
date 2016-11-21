@@ -5,6 +5,7 @@
   "description": "msg app thing",
   "dependencies": {
     "express": "*",
-    "socket.io": "*"
+    "socket.io": "*",
+    "sha1": "*"
   }
 }

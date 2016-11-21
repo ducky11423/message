@@ -1,26 +1,122 @@
 jQuery(function ($) {
             var socket = io.connect();
-            var $nickForm = $('#setNick');
             var $nickError = $('#nickError');
-            var $nickBox = $('#nickname');
+            var $cName = $('#create_nickname');
+            var $cPassword = $('#create_password');
+            var $cButton = $('#create_button');
+
+            var $lName = $('#login_nickname');
+            var $lPassword = $('#login_password');
+            var $lButton = $('#login_button');
+            var $loginError = $("#loginError");
+            
             var $users = $('#users');
-            var $messageForm = $('#send-message');
-            var $messageBox = $('#message');
+            var $messageField = $('#message_field');
+            var $messageButton = $('#message_button');
             var $chat = $('#chat');
 
-            $nickForm.submit(function(e){
-                e.preventDefault();
-                socket.emit('new user', $nickBox.val(), function (data) {
+            function createAccount(){
+                if($cName.val() == "") {
+                    $nickError.html("You must specify a username");
+                    return;
+                }
+                if($cPassword.val() == "") {
+                    $nickError.html("You must put in a password");
+                    return;
+                }
+
+                socket.emit('create user', {name: $cName.val(), password: $cPassword.val()}, function (data) {
                     if (data){
-                        $('#nickWrap').hide();
-                        $('#contentWrap').show();
-                        $('#users').show();
+                        $nickError.html("Account made! Login now.");
                     } else {
                         $nickError.html('Lmao no pls pick another username, that one is already taken.');
                     }
                 });
-                $nickBox.val('');
+                $cName.val('');
+                $cPassword.val('');
+            }
+
+            $cButton.click(function(e){
+                createAccount();
             });
+
+            $cName.keyup(function(e){
+                if(e.keyCode == 13){
+                    createAccount();
+                }
+            });
+
+            $cPassword.keyup(function(e){
+                if(e.keyCode == 13){
+                    createAccount();
+                }
+            });
+
+            function login(){
+                if($lName.val() == "") {
+                    $loginError.html("You must specify a username");
+                    return;
+                }
+                if($lPassword.val() == "") {
+                    $loginError.html("You must put in a password");
+                    return;
+                }
+
+                socket.emit('login', {name: $lName.val(), password: $lPassword.val()}, function (data) {
+                    if(data == 1){
+                        $loginError.html("User already logged in.");
+                    } else if (data == 2){
+                        $loginError.html("Username doesn't exist.");
+                    } else if (data == 3){
+                        $loginError.html("Password is incorrect.");
+                    } else if(data) {
+                        $('#nickWrap').hide();
+                        $('#contentWrap').show();
+                        $('#users').show();
+                    } else {
+
+                    }
+                });
+                $lName.val('');
+                $lPassword.val('');
+            }
+
+            $lButton.click(function(e){
+                login();
+            });
+
+            $lName.keyup(function(e){
+                if(e.keyCode == 13){
+                    login();
+                }
+            });
+
+            $lPassword.keyup(function(e){
+                if(e.keyCode == 13){
+                    login();
+                }
+            });
+
+            function submitMessage(){
+                if($messageField.val() != ""){
+                    socket.emit('send message', $messageField.val(), function(data){
+                        document.getElementById('chat').innerHTML += "<span class='error'>" + data + "</span></br>";
+                        document.getElementById('chat').scrollTop = document.getElementById('chat').scrollHeight;
+                    });
+                }
+                
+                $messageField.val('');
+            }
+
+            $messageButton.click(function(e){
+                submitMessage();
+            });
+
+            $messageField.keyup(function(e){
+                if(e.keyCode == 13){
+                    submitMessage();
+                }
+            })
 
             socket.on('usernames', function(data){
                 var html = '';
@@ -28,15 +124,6 @@ jQuery(function ($) {
                     html += data[i] + '<br/>'
                 }
                 $users.html(html);
-            });
-
-            $messageForm.submit(function (e) {
-                e.preventDefault();
-                socket.emit('send message', $messageBox.val(), function(data){
-                  document.getElementById('chat').innerHTML += "<span class='error'>" + data + "</span></br>";
-                  document.getElementById('chat').scrollTop = document.getElementById('chat').scrollHeight;
-                });
-                $messageBox.val('');
             });
 
             socket.on('new message', function (data) {

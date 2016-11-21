@@ -9,12 +9,25 @@
 </head>
 <body>
     <div id="nickWrap">
-        <p id='enter_username'>Enter a username:</p>
-        <p id="nickError"></p>
-        <form id="setNick">
-            <input size="35" id="nickname" />
-            <input type="submit" />
-        </form>
+        <div id="accountCreation">
+            <p id='enter_username'>Create account</p>
+            <p id="nickError"></p>
+            <div id="setNick">
+                <input type="text" id="create_nickname" placeholder="Username"/> </br>
+                <input type="password" id="create_password" placeholder="Password"/> </br>
+                <button id="create_button">Create Account</button>
+            </div>
+        </div>
+
+        <div id="login">
+            <p id='enter_username'>Login</p>
+            <p id="loginError"></p>
+            <div id="setNick">
+                <input type="text" id="login_nickname" placeholder="Username"/> </br>
+                <input type="password" id="login_password" placeholder="Password"/> </br>
+                <button id="login_button">Login</button>
+            </div>
+        </div>
     </div>
 
 <table style="width:100%">
@@ -29,10 +42,10 @@
                 </div>
 
                 <div id="form">
-                    <form id="send-message">
-                        <input size="35" id="message" />
-                        <input type="submit" />
-                    </form>
+                    <div id="send-message">
+                        <input type="text" id="message_field" />
+                        <button id="message_button">Send message</button>
+                    </div>
                 </div>
             </div>
         </td>

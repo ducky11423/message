@@ -1,8 +1,28 @@
 var express = require('express'),
     app = express(),
     server = require('http').createServer(app),
-    io = require('socket.io').listen(server),
-    users = {};
+    io = require('socket.io').listen(server), 
+    fs = require('fs'),
+    sha1 = require('sha1')
+    users = {}, 
+    accounts = [];
+
+fs.readFile(__dirname + "/users.json", (err, data) => {
+    if(err){
+        if(err.code === "ENOENT"){
+            fs.writeFile(__dirname + "/users.json", "{}", (err) => {
+                if(err) throw err;
+            });
+        } else throw err;
+    }
+
+    if(data == "") return;
+
+    var parsed = JSON.parse(data);
+    for(var x in parsed){
+        accounts.push(parsed[x]);
+    }
+})
 
 server.listen(3000);
 
@@ -17,22 +37,33 @@ if(process.argv[2] == "dev") {
 }
 
 io.sockets.on('connection', function (socket) {
-    socket.on('new user', function (data, callback) {
-        if (data in users) {
-            callback(false);
+    socket.on('login', function (data, callback) {
+        if (data.name in users) {
+            callback(1);
+            return;
         } else {
-          if(data.indexOf(' ') == -1){
-            callback(true);
-            var nick = escapeChars(data);
-            if(nick.length > 16){
-                nick = nick.substring(0, 15);
+            var accountFound = false;
+
+            for(i = 0; i < accounts.length; i++){
+              var account = accounts[i];
+              if(account.name == data.name){
+                  accountFound = true;
+                  if(sha1(data.password) == account.password){
+                      socket.nickname = account.name;
+                      users[socket.nickname] = socket;
+                      updateNicknames();
+                      console.log("User " + account.name + " logged in");
+                      callback(data.name);
+                      return;
+                  } else callback(3);
+              }
             }
-            socket.nickname = nick;
-            users[socket.nickname] = socket;
-            updateNicknames();
+            if(!accountFound){
+                callback(2);
+                return;
+            } 
         }
-      }
-    });
+      });
 
     function updateNicknames() {
         io.sockets.emit('usernames', Object.keys(users));
@@ -62,6 +93,24 @@ io.sockets.on('connection', function (socket) {
       }
     });
 
+    socket.on('create user', function (data, callback) {
+        var userExists = false;
+        for(i = 0; i < accounts.length; i++){
+            var v = accounts[i];
+            if(v.name == data.name) {
+                userExists = true;
+                callback(false);
+            }
+        }
+        if(!userExists){
+            var pwd = sha1(data.password);
+            accounts[accounts.length] = {name: data.name, password: pwd};
+
+            saveAccounts();
+            callback(true);
+        }
+    });
+
     socket.on('disconnect', function (data) {
         if (!socket.nickname) return;
         delete users[socket.nickname];
@@ -75,4 +124,17 @@ function escapeChars(input){
     input = input.replace(new RegExp(">", "g"), "&gt;");
     input = input.replace(new RegExp("/", "g"), "&frasl;");
     return input;
+}
+
+function saveAccounts(){
+    //var json = JSON.stringify(accounts);
+    var json = "{";
+    for(i = 0; i < accounts.length; i++){
+        json += "\"" + i + "\":{\"name\":\"" + accounts[i].name + "\", \"password\":\"" + accounts[i].password + "\"}";
+        if(accounts[i+1]) json += ",";
+    }
+    json += "}";
+    fs.writeFile(__dirname + "/users.json", json, (err) => {
+        if(err) throw err;
+    });
 }
