@@ -161,6 +161,20 @@ jQuery(function ($) {
                 }
             });
 
+            socket.on('user joined', function(data){
+                if(connected){
+                    document.getElementById('chat').innerHTML += "<span class='alert'><b>" + data + "</b> has joined.</span></br>";
+                    document.getElementById('chat').scrollTop = document.getElementById('chat').scrollHeight;
+                }
+            });
+
+            socket.on('user left', function(data){
+                if(connected){
+                    document.getElementById('chat').innerHTML += "<span class='alert'><b>" + data + "</b> has left.</span></br>";
+                    document.getElementById('chat').scrollTop = document.getElementById('chat').scrollHeight;
+                }
+            })
+
             socket.on('error', function(err){
                 if(err.message == "websocket error"){
                     alert("You have been disconnected. Please login again.");
