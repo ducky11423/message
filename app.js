@@ -56,8 +56,8 @@ io.sockets.on('connection', function (socket) {
                       socket.nickname = account.name;
                       users[socket.nickname] = socket;
                       updateNicknames();
-                      io.sockets.emit('user joined', account.name);
                       callback(data.name);
+                      io.sockets.emit('user joined', account.name);
                       return;
                   } else callback(3);
               }
