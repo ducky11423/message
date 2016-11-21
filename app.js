@@ -94,12 +94,17 @@ io.sockets.on('connection', function (socket) {
     });
 
     socket.on('create user', function (data, callback) {
+
+        if(data.name.indexOf('"') != -1){
+            callback(1);
+            return;
+        }
         var userExists = false;
         for(i = 0; i < accounts.length; i++){
             var v = accounts[i];
             if(v.name == data.name) {
                 userExists = true;
-                callback(false);
+                callback(2);
             }
         }
         if(!userExists){

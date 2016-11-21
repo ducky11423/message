@@ -26,10 +26,12 @@ jQuery(function ($) {
                 }
 
                 socket.emit('create user', {name: $cName.val(), password: $cPassword.val()}, function (data) {
-                    if (data){
-                        $nickError.html("Account made! Login now.");
-                    } else {
+                    if(data == 1){
+                        $nickError.html("Your password cannot contain quotes. Scum.");
+                    } else if(data == 2){
                         $nickError.html('Lmao no pls pick another username, that one is already taken.');
+                    } else if (data){
+                        $nickError.html("Account made! Login now.");
                     }
                 });
                 $cName.val('');
@@ -69,7 +71,7 @@ jQuery(function ($) {
                         $loginError.html("Username doesn't exist.");
                     } else if (data == 3){
                         $loginError.html("Password is incorrect.");
-                    } else if(data) {
+                    }  else if(data) {
                         $('#nickWrap').hide();
                         $('#contentWrap').show();
                         $('#users').show();
