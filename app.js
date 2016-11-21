@@ -36,7 +36,11 @@ if(process.argv[2] == "dev") {
     });
 }
 
+io.sockets.emit('disconnect');
+
 io.sockets.on('connection', function (socket) {
+    
+
     socket.on('login', function (data, callback) {
         if (data.name in users) {
             callback(1);

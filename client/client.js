@@ -168,4 +168,10 @@ jQuery(function ($) {
                     delete socket;
                 }
             });
+
+            socket.on('disconnect', function(data){
+                alert("You have been disconnected. Please login again.");
+                connected = false;
+                delete socket;
+            });
         });
