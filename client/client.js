@@ -3,6 +3,7 @@ jQuery(function ($) {
             var $nickError = $('#nickError');
             var $cName = $('#create_nickname');
             var $cPassword = $('#create_password');
+            var $cPasswordConfirm = $("#create_password_confirm");
             var $cButton = $('#create_button');
 
             var $lName = $('#login_nickname');
@@ -22,6 +23,10 @@ jQuery(function ($) {
                 }
                 if($cPassword.val() == "") {
                     $nickError.html("You must put in a password");
+                    return;
+                }
+                if($cPassword.val() != $cPasswordConfirm.val()){
+                    $nickError.html("Passwords must match");
                     return;
                 }
 
@@ -49,6 +54,12 @@ jQuery(function ($) {
             });
 
             $cPassword.keyup(function(e){
+                if(e.keyCode == 13){
+                    createAccount();
+                }
+            });
+
+            $cPasswordConfirm.keyup(function(e){
                 if(e.keyCode == 13){
                     createAccount();
                 }
