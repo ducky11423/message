@@ -16,6 +16,8 @@ jQuery(function ($) {
             var $messageButton = $('#message_button');
             var $chat = $('#chat');
 
+            var $admins = [];
+
             var connected = false;
 
             function createAccount(){
@@ -88,6 +90,7 @@ jQuery(function ($) {
                         $('#nickWrap').hide();
                         $('#contentWrap').show();
                         $('#users').show();
+                        $admins = data;
                         connected = true;
                     } else {
 
@@ -141,15 +144,18 @@ jQuery(function ($) {
 
             socket.on('usernames', function(data){
                 var html = '';
+                console.log($admins);
                 for (i = 0; i < data.length; i++) {
-                    html += data[i] + '<br/>'
+                    if($admins.indexOf(data[i]) != -1) html += "<span class='admin'>" + data[i] + "</span></br>";
+                    else html += data[i] + '<br/>'
                 }
                 $users.html(html);
             });
 
             socket.on('new message', function (data) {
                 if(connected) {
-                    document.getElementById('chat').innerHTML += "<span class='msg'><b>" + data.nick + ":</b> " + data.msg + "</span></br>";
+                    if($admins.indexOf(data.nick) != -1) document.getElementById('chat').innerHTML += "<span class='msg'><b><span class='admin'>" + data.nick + ":</span></b> " + data.msg + "</span></br>";
+                    else document.getElementById('chat').innerHTML += "<span class='msg'><b>" + data.nick + ":</b> " + data.msg + "</span></br>";
                     document.getElementById('chat').scrollTop = document.getElementById('chat').scrollHeight;
                 }
             });
@@ -163,14 +169,16 @@ jQuery(function ($) {
 
             socket.on('user joined', function(data){
                 if(connected){
-                    document.getElementById('chat').innerHTML += "<span class='alert'><b>" + data + "</b> has joined.</span></br>";
+                    if($admins.indexOf(data) != -1) document.getElementById('chat').innerHTML += "<span class='alert'><b><span class='admin'>" + data + "</span></b> has joined.</span></br>";
+                    else document.getElementById('chat').innerHTML += "<span class='alert'><b>" + data + "</b> has joined.</span></br>";
                     document.getElementById('chat').scrollTop = document.getElementById('chat').scrollHeight;
                 }
             });
 
             socket.on('user left', function(data){
                 if(connected){
-                    document.getElementById('chat').innerHTML += "<span class='alert'><b>" + data + "</b> has left.</span></br>";
+                    if($admins.indexOf(data) != -1) document.getElementById('chat').innerHTML += "<span class='alert'><b><span class='admin'>" + data + "</span></b> has left.</span></br>";
+                    else document.getElementById('chat').innerHTML += "<span class='alert'><b>" + data + "</b> has left.</span></br>";
                     document.getElementById('chat').scrollTop = document.getElementById('chat').scrollHeight;
                 }
             })

@@ -5,7 +5,15 @@ var express = require('express'),
     fs = require('fs'),
     sha1 = require('sha1')
     users = {}, 
-    accounts = [];
+    accounts = [],
+    admins = [
+        "Ducky",
+        "Ducky2",
+        "Jacob",
+        "Chilleh",
+        "Zxl",
+        "Admin"
+    ];
 
 fs.readFile(__dirname + "/users.json", (err, data) => {
     if(err){
@@ -55,8 +63,8 @@ io.sockets.on('connection', function (socket) {
                   if(sha1(data.password) == account.password){
                       socket.nickname = account.name;
                       users[socket.nickname] = socket;
+                      callback(admins);
                       updateNicknames();
-                      callback(data.name);
                       io.sockets.emit('user joined', account.name);
                       return;
                   } else callback(3);
