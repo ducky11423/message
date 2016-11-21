@@ -8,6 +8,7 @@ jQuery(function ($) {
             var $lName = $('#login_nickname');
             var $lPassword = $('#login_password');
             var $lButton = $('#login_button');
+            var $loginError = $("#loginError");
             
             var $users = $('#users');
             var $messageField = $('#message_field');
@@ -62,12 +63,18 @@ jQuery(function ($) {
                 }
 
                 socket.emit('login', {name: $lName.val(), password: $lPassword.val()}, function (data) {
-                    if (data){
+                    if(data == 1){
+                        $loginError.html("User already logged in.");
+                    } else if (data == 2){
+                        $loginError.html("Username doesn't exist.");
+                    } else if (data == 3){
+                        $loginError.html("Password is incorrect.");
+                    } else if(data) {
                         $('#nickWrap').hide();
                         $('#contentWrap').show();
                         $('#users').show();
                     } else {
-                        $loginError.html('Username or password incorrect.');
+
                     }
                 });
                 $lName.val('');

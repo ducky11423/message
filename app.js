@@ -38,21 +38,32 @@ if(process.argv[2] == "dev") {
 
 io.sockets.on('connection', function (socket) {
     socket.on('login', function (data, callback) {
-        if (data in users) {
-            callback(false);
+        if (data.name in users) {
+            callback(1);
+            return;
         } else {
-          if(data.indexOf(' ') == -1){
-            callback(true);
-            var nick = escapeChars(data);
-            if(nick.length > 16){
-                nick = nick.substring(0, 15);
+            var accountFound = false;
+
+            for(i = 0; i < accounts.length; i++){
+              var account = accounts[i];
+              if(account.name == data.name){
+                  accountFound = true;
+                  if(sha1(data.password) == account.password){
+                      socket.nickname = account.name;
+                      users[socket.nickname] = socket;
+                      updateNicknames();
+                      console.log("User " + account.name + " logged in");
+                      callback(data.name);
+                      return;
+                  } else callback(3);
+              }
             }
-            socket.nickname = nick;
-            users[socket.nickname] = socket;
-            updateNicknames();
+            if(!accountFound){
+                callback(2);
+                return;
+            } 
         }
-      }
-    });
+      });
 
     function updateNicknames() {
         io.sockets.emit('usernames', Object.keys(users));
