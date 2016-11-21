@@ -16,6 +16,8 @@ jQuery(function ($) {
             var $messageButton = $('#message_button');
             var $chat = $('#chat');
 
+            var connected = false;
+
             function createAccount(){
                 if($cName.val() == "") {
                     $nickError.html("You must specify a username");
@@ -86,6 +88,7 @@ jQuery(function ($) {
                         $('#nickWrap').hide();
                         $('#contentWrap').show();
                         $('#users').show();
+                        connected = true;
                     } else {
 
                     }
@@ -112,10 +115,15 @@ jQuery(function ($) {
 
             function submitMessage(){
                 if($messageField.val() != ""){
-                    socket.emit('send message', $messageField.val(), function(data){
+                    if(connected) {
+                        socket.emit('send message', $messageField.val(), function(data){
                         document.getElementById('chat').innerHTML += "<span class='error'>" + data + "</span></br>";
                         document.getElementById('chat').scrollTop = document.getElementById('chat').scrollHeight;
-                    });
+                        });
+                    } else {
+                        document.getElementById('chat').innerHTML += "<span class='error'><b> You are not connected! Please login again!</span></br>";
+                        document.getElementById('chat').scrollTop = document.getElementById('chat').scrollHeight;
+                    }
                 }
                 
                 $messageField.val('');
@@ -140,12 +148,24 @@ jQuery(function ($) {
             });
 
             socket.on('new message', function (data) {
-                document.getElementById('chat').innerHTML += "<span class='msg'><b>" + data.nick + ":</b> " + data.msg + "</span></br>";
-                document.getElementById('chat').scrollTop = document.getElementById('chat').scrollHeight;
+                if(connected) {
+                    document.getElementById('chat').innerHTML += "<span class='msg'><b>" + data.nick + ":</b> " + data.msg + "</span></br>";
+                    document.getElementById('chat').scrollTop = document.getElementById('chat').scrollHeight;
+                }
             });
 
             socket.on('whisper', function(data){
-              document.getElementById('chat').innerHTML += "<span class='whisper'><b>" + data.nick + ":</b> " + data.msg + "</span></br>";
-              document.getElementById('chat').scrollTop = document.getElementById('chat').scrollHeight;
+                if(connected){
+                    document.getElementById('chat').innerHTML += "<span class='whisper'><b>" + data.nick + ":</b> " + data.msg + "</span></br>";
+                    document.getElementById('chat').scrollTop = document.getElementById('chat').scrollHeight;
+                }
+            });
+
+            socket.on('error', function(err){
+                if(err.message == "websocket error"){
+                    alert("You have been disconnected. Please login again.");
+                    connected = false;
+                    delete socket;
+                }
             });
         });
