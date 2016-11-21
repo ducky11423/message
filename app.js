@@ -112,7 +112,7 @@ io.sockets.on('connection', function (socket) {
             accounts[accounts.length] = {name: data.name, password: pwd};
 
             saveAccounts();
-            callback(true);
+            callback(3);
         }
     });
 

@@ -27,10 +27,10 @@ jQuery(function ($) {
 
                 socket.emit('create user', {name: $cName.val(), password: $cPassword.val()}, function (data) {
                     if(data == 1){
-                        $nickError.html("Your password cannot contain quotes. Scum.");
+                        $nickError.html("Your username cannot contain quotes. Scum.");
                     } else if(data == 2){
                         $nickError.html('Lmao no pls pick another username, that one is already taken.');
-                    } else if (data){
+                    } else if (data == 3){
                         $nickError.html("Account made! Login now.");
                     }
                 });
