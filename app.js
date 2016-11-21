@@ -127,7 +127,7 @@ io.sockets.on('connection', function (socket) {
 function escapeChars(input){
     input = input.replace(new RegExp("<", "g"), "&lt;");
     input = input.replace(new RegExp(">", "g"), "&gt;");
-    input = input.replace(new RegExp("/", "g"), "&frasl;");
+    input = input.replace(new RegExp("/", "g"), "&#47");
     return input;
 }
 
