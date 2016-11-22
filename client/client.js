@@ -10,7 +10,7 @@ jQuery(function ($) {
             var $lPassword = $('#login_password');
             var $lButton = $('#login_button');
             var $loginError = $("#loginError");
-            
+
             var $users = $('#users');
             var $messageField = $('#message_field');
             var $messageButton = $('#message_button');
@@ -128,7 +128,7 @@ jQuery(function ($) {
                         document.getElementById('chat').scrollTop = document.getElementById('chat').scrollHeight;
                     }
                 }
-                
+
                 $messageField.val('');
             }
 
@@ -191,8 +191,14 @@ jQuery(function ($) {
                 }
             });
 
-            socket.on('disconnect', function(data){
+            socket.on('disconnected', function(data){
                 alert("You have been disconnected. Please login again.");
+                connected = false;
+                delete socket;
+            });
+            socket.on('kicked', function(data){
+                alert("You have been disconnected. Please login again.");
+                socket.emit('disconnect');
                 connected = false;
                 delete socket;
             });

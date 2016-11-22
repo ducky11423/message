@@ -45,7 +45,7 @@ if(process.argv[2] == "dev") {
   });
 }
 
-io.sockets.emit('disconnect');
+io.sockets.emit('disconnected');
 
 io.sockets.on('connection', function (socket) {
 
@@ -85,7 +85,7 @@ io.sockets.on('connection', function (socket) {
   socket.on('send message', function (data, callback) {
     var msg = data.trim();
     if(msg.substr(0,1) === '/') {
-      if(msg.substr(1,3) === 'w '){
+      if(msg.substr(1,2) === 'w '){
         msg = msg.substr(3);
         var ind = msg.indexOf(' ');
         if(ind !== -1){
@@ -105,10 +105,12 @@ io.sockets.on('connection', function (socket) {
       } else if(msg.substr(1,5) === 'kick '){
         var ind = msg.indexOf(' ');
         if(ind !== -1){
-          var name = msg.substring(6, msg.length);
+          var name = msg.substring(6);
           if(name in users){
-            users[name].emit('disconnect', {});
-            console.log('user ' + name + ' has been kicked!');
+            users[name].emit('kicked');
+            io.sockets.emit('user left', name);
+            updateNicknames();
+            console.log('user ' + socket.nickname + ' has kicked ' + name + ', lmao.');
           }
         }
       } else{
