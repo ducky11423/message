@@ -1,22 +1,16 @@
 #chat{
-    height: 66%;
+    height: 90%;
+    word-wrap: break-word;
     overflow:auto;
     padding: 20px;
+    font-family: Verdana, Geneva, sans-serif;
+    font-size: 14px;
   }
-#contentWrap{
-    display: none;
-}
 #chatWrap{
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
 
-  width: 52.5%;
-  height: 66%;
-
-
-  padding: 20px;
+  padding: 0px;
   background: rgb(244, 92, 66);
   color: black;
   text-align: left;
@@ -24,7 +18,7 @@
   clear: both;
 }
 body {
-  background: rgb(61, 55, 53);
+  background: rgb(41, 31, 30);
 }
 #send-message{
   left: 50%;
@@ -33,4 +27,35 @@ body {
 }
 #msg{
   clear: both;
+}
+#form{
+  bottom:0;
+}
+#contentWrap{
+  display:none;
+  position:absolute;
+  width:72%;
+  height:75%;
+}
+#users{
+  display:none;
+  font-family: Verdana, Geneva, sans-serif;
+  color: white;
+  font-size: 16px;
+}
+#enter_username{
+  font-family: Verdana, Geneva, sans-serif;
+  color: white;
+  font-size: 16px;
+}
+.error{
+  color: rgb(123, 27, 34);
+  text-decoration: underline;
+}
+.whisper{
+  color: darkgrey;
+  font-style: italic;
+}
+.admin{
+  color: #004c97;
 }

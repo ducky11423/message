@@ -4,27 +4,56 @@
 <head>
     <meta charset="utf-8" />
     <title>MSG Service</title>
+    <link  rel="stylesheet" type="text/css" href="/client/style/style.css">
+    <link rel="icon" type="image/png" href="client/icon.png">
 </head>
 <body>
     <div id="nickWrap">
-        <p>Enter a username:</p>
-        <p id="nickError"></p>
-        <form id="setNick">
-            <input size="35" id="nickname" />
-            <input type="submit" />
-        </form>
+        <div id="accountCreation">
+            <p id='enter_username'>Create account - Note: Please don't use a password you use for other things, while the passwords are hashed we can't gaurantee their safety.</p>
+            <p id="nickError"></p>
+            <div id="setNick">
+                <input type="text" id="create_nickname" placeholder="Username"/> </br>
+                <input type="password" id="create_password" placeholder="Password"/> </br>
+                <input type="password" id="create_password_confirm" placeholder="Confirm Password"/> </br>
+                <button id="create_button">Create Account</button>
+            </div>
+        </div>
+
+        <div id="login">
+            <p id='enter_username'>Login</p>
+            <p id="loginError"></p>
+            <div id="setNick">
+                <input type="text" id="login_nickname" placeholder="Username"/> </br>
+                <input type="password" id="login_password" placeholder="Password"/> </br>
+                <button id="login_button">Login</button>
+            </div>
+        </div>
     </div>
 
-    <div id="contentWrap">
-        <div id="chatWrap">
-            <div id="chat"></div>
-        </div>
-        <form id="send-message">
-            <input size="35" id="message" />
-            <input type="submit" />
-        </form>
-        <div id="users"></div>
-    </div>
+<table style="width:100%">
+    <tr>
+        <td style="width:12.5%">
+        </td>
+
+        <td style="width:75%">
+            <div id="contentWrap">
+                <div id="chatWrap">
+                    <div id="chat"></div>
+                </div>
+
+                <div id="form">
+                    <div id="send-message">
+                        <input type="text" id="message_field" />
+                        <button id="message_button">Send message</button>
+                    </div>
+                </div>
+            </div>
+        </td>
+        <td style="width:12.5%">
+            <div id="users"></div>
+        </td>
+</table>
 
     <script src="http://code.jquery.com/jquery-latest.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
