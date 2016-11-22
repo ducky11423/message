@@ -12,7 +12,8 @@ var express = require('express'),
         "Jacob",
         "Chilleh",
         "Zxl",
-        "Admin"
+        "Admin",
+        "chraffx"
     ];
 
 fs.readFile(__dirname + "/users.json", (err, data) => {
@@ -100,7 +101,16 @@ io.sockets.on('connection', function (socket) {
         } else{
           callback('Whoops! Try typing a message next time lmao.');
         }
-      } else{
+      } else if(msg.substr(0,5) === '/kick '){
+          var ind = msg.indexOf(' ');
+          if(ind !== -1){
+            var name = msg.substring(6, msg.length);
+            if(name in users){
+              socket.emit('disconnect', users[name]);
+              console.log('kick!');
+            }
+          }
+        }  else{
           io.sockets.emit('new message', { msg: escapeChars(msg), nick: socket.nickname });
       }
     });
