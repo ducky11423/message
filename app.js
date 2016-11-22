@@ -84,7 +84,8 @@ io.sockets.on('connection', function (socket) {
 
     socket.on('send message', function (data, callback) {
       var msg = data.trim();
-      if(msg.substr(0,3) === '/w '){
+      if(msg.substr(0,1) === '/') {
+      if(msg.substr(1,3) === 'w '){
         msg = msg.substr(3);
         var ind = msg.indexOf(' ');
         if(ind !== -1){
@@ -101,16 +102,20 @@ io.sockets.on('connection', function (socket) {
         } else{
           callback('Whoops! Try typing a message next time lmao.');
         }
-      } else if(msg.substr(0,5) === '/kick '){
+      } else if(msg.substr(1,5) === 'kick '){
           var ind = msg.indexOf(' ');
           if(ind !== -1){
             var name = msg.substring(6, msg.length);
             if(name in users){
-              socket.emit('disconnect', users[name]);
+              users[name]
+              socket.emit('disconnect');
               console.log('kick!');
             }
           }
-        }  else{
+        } else{
+          callback('Whoops! try doing something next time lmao');
+        }
+      }  else{
           io.sockets.emit('new message', { msg: escapeChars(msg), nick: socket.nickname });
       }
     });
