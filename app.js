@@ -1,10 +1,10 @@
 var express = require('express'),
     app = express(),
     server = require('http').createServer(app),
-    io = require('socket.io').listen(server),
+    io = require('socket.io').listen(server), 
     fs = require('fs'),
     sha1 = require('sha1')
-    users = {},
+    users = {}, 
     accounts = [],
     admins = [
         "Ducky",
@@ -39,7 +39,7 @@ app.get('/message', function (req, res) {
     res.sendfile(__dirname + '/client/index.html');
 });
 
-if("dev" in process.argv) {
+if(process.argv[2] == "dev") {
     app.get('/client/*', function (req, res) {
         res.sendfile(__dirname + req.url);
     });
@@ -48,7 +48,7 @@ if("dev" in process.argv) {
 io.sockets.emit('disconnect');
 
 io.sockets.on('connection', function (socket) {
-
+    
 
     socket.on('login', function (data, callback) {
         if (data.name in users) {
@@ -74,7 +74,7 @@ io.sockets.on('connection', function (socket) {
             if(!accountFound){
                 callback(2);
                 return;
-            }
+            } 
         }
       });
 
